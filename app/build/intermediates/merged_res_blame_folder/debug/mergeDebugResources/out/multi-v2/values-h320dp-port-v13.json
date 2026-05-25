@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.mssp.qrverifier.app-mergeDebugResources-41:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "map": [
+                {
+                    "source": "/home/darkly/.gradle/caches/9.0.0/transforms/eabc131d77dc53a3793783fbb0903328/transformed/material-1.12.0/res/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "63",
+                        "endOffsets": "114"
+                    }
+                }
+            ]
+        }
+    ]
+}

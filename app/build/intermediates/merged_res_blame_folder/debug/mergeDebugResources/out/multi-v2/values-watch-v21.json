@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.mssp.qrverifier.app-mergeDebugResources-41:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "/home/darkly/.gradle/caches/9.0.0/transforms/01a33ef1e2bbf2d1e67bda33ea08257b/transformed/appcompat-1.7.0/res/values-watch-v21/values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/drawable_ic_check_circle.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/drawable/ic_check_circle.xml"
+    },
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/layout_activity_main.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/drawable_ic_warning.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/drawable/ic_warning.xml"
+    },
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/drawable_bg_badge.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/drawable/bg_badge.xml"
+    },
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/mipmap-hdpi_ic_launcher.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/mipmap-hdpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.mssp.qrverifier.app-debug-43:/drawable_ic_cancel_circle.xml.flat",
+        "source": "com.mssp.qrverifier.app-main-45:/drawable/ic_cancel_circle.xml"
+    }
+]

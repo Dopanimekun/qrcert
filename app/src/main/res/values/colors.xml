@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App primary -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Result backgrounds (dark tint) -->
+    <color name="bg_valid">#1A2E1A</color>
+    <color name="bg_invalid">#2E1A1A</color>
+    <color name="bg_unknown">#2E2A1A</color>
+
+    <!-- Role badge colors -->
+    <color name="role_admin">#6200EE</color>
+    <color name="role_financeiro">#1B5E20</color>
+    <color name="role_visitante">#BF360C</color>
+</resources>
