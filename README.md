@@ -14,6 +14,7 @@ Este aplicativo Android atua como a contraparte de validação da Prova de Conce
 A verificação ocorre de forma totalmente local, sem a necessidade de conexão com a internet (offline), assegurando que o dado lido é autêntico e não foi adulterado.
 
 O emissor para este aplicativo encontra-se neste [repositório](https://github.com/Dopanimekun/qr-code-cert).
+
 ---
 
 ## ⚠️ Avisos de Segurança (PoC)
