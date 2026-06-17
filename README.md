@@ -17,12 +17,6 @@ O aplicativo se encontra neste [repositório](https://github.com/joao730/qr-veri
 
 ---
 
-## ⚠️ Aviso Importante
-
-> **Atenção:** Boa parte do código deste repositório foi produzida utilizando *vibe coding* (experimentação rápida/geração assistida). Este código foi feito estritamente como uma Prova de Conceito (PoC) para fins acadêmicos e validação de ideias. **Não crie expectativas acerca da qualidade do código para um ambiente de produção.**
-
----
-
 ## ✨ Funcionalidades
 
 * **Geração de QR Code:** Criação de QR Codes contendo as informações necessárias.
