@@ -46,7 +46,7 @@ const PACKAGES = [
   },
   {
     name: "verificador-pwa",
-    inject: ["verificador-pwa/verificador.html"], // Atualizado para o nome real do HTML
+    inject: ["verificador-pwa/index.html"], // Atualizado para o nome real do HTML
     copy: [
       // Adicione aqui os demais arquivos da PWA no futuro (manifest.json, sw.js, etc)
     ],
