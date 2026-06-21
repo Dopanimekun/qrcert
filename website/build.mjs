@@ -1,24 +1,3 @@
-/**
- * build.mjs — Inject keys.js inline into emitter and verifier HTML files
- *
- * Estrutura esperada:
- *   /
- *   ├── keys.js                  ← source of truth (chaves compartilhadas)
- *   ├── emitter-web/index.html
- *   ├── verifier-pwa/index.html
- *   └── build.mjs                ← este script
- *
- * Saída:
- *   dist/
- *   ├── emitter-web/index.html   ← keys.js injetado inline
- *   └── verifier-pwa/index.html  ← keys.js injetado inline
- *       verifier-pwa/manifest.json, sw.js, etc. (copiados sem alteração)
- *
- * Uso:
- *   node build.mjs
- *   node build.mjs --watch       (re-executa ao salvar qualquer arquivo)
- */
-
 import fs from "node:fs";
 import path from "node:path";
 
@@ -28,33 +7,23 @@ const ROOT = new URL(".", import.meta.url).pathname;
 const KEYS_PATH = path.join(ROOT, "keys.js");
 const DIST = path.join(ROOT, "dist");
 
-/**
- * Entradas: cada objeto define um "pacote" a ser processado.
- *
- * inject  → arquivos HTML onde keys.js será injetado inline
- * copy    → demais arquivos do pacote copiados sem alteração para dist/
- *
- * Adicione quantos pacotes precisar aqui.
- */
 const PACKAGES = [
   {
+    name: "raiz",
+    inject: [],
+    copy: ["index.html"],
+  },
+  {
     name: "emissor",
-    inject: ["emissor/index.html"],
-    copy: [
-      "emissor/demo-keys.js", // Copia o arquivo para a dist/emissor/
-    ],
+    inject: ["emissor/emissor.html"],
+    copy: ["emissor/demo-keys.js"],
   },
   {
     name: "verificador-pwa",
-    inject: ["verificador-pwa/index.html"], // Atualizado para o nome real do HTML
-    copy: [
-      // Adicione aqui os demais arquivos da PWA no futuro (manifest.json, sw.js, etc)
-    ],
+    inject: ["verificador-pwa/verificador.html"],
+    copy: [],
   },
 ];
-
-// ── Padrões de <script> a substituir ───────────────────────────────────────
-// Cobre qualquer variação de caminho para keys.js usada nos HTML originais.
 
 const KEYS_SCRIPT_PATTERNS = [
   /<script\s+src=["']keys\.js["']\s*><\/script>/gi,

@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ECDSA QR — Sistema de Certificados</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green: #02671b;
+        --green-dim: #00c832;
+        --green-glow: rgba(0, 255, 65, 0.13);
+        --green-faint: rgba(0, 255, 65, 0.03);
+        --bg: #ffffff;
+        --border: #0a2a0a;
+        --border-dim: #1a4a1a;
+        --text: #323232;
+        --text-muted: #888;
+        --red: #cc0000;
+        --amber: #aa6600;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Share Tech Mono", monospace;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        cursor: crosshair;
+      }
+
+      /* scanlines */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.055) 2px,
+          rgba(0, 0, 0, 0.055) 4px
+        );
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      /* grid */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--green-faint) 1px, transparent 1px),
+          linear-gradient(90deg, var(--green-faint) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── Header ── */
+      header {
+        position: relative;
+        z-index: 10;
+        border-bottom: 1px solid var(--border-dim);
+        padding: 16px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(180deg, #020f02 0%, transparent 100%);
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: var(--green);
+        text-shadow:
+          0 0 20px var(--green),
+          0 0 40px rgba(0, 255, 65, 0.3);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+      .logo span {
+        color: var(--text-muted);
+        font-weight: 400;
+      }
+
+      .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        letter-spacing: 2px;
+      }
+      .pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 8px var(--green);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.8);
+        }
+      }
+      .sep {
+        color: var(--border-dim);
+      }
+
+      /* ── Hero ── */
+      .hero {
+        position: relative;
+        z-index: 10;
+        padding: 72px 40px 56px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        border-bottom: 1px solid var(--border-dim);
+      }
+
+      .hero-eyebrow {
+        font-size: 0.6rem;
+        letter-spacing: 5px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      .hero-title {
+        font-family: "Orbitron", monospace;
+        font-weight: 900;
+        font-size: clamp(1.6rem, 4vw, 2.8rem);
+        color: var(--green);
+        text-shadow: 0 0 40px rgba(0, 255, 65, 0.18);
+        letter-spacing: 3px;
+        line-height: 1.15;
+      }
+      .hero-title .slash {
+        color: var(--text-muted);
+        font-weight: 400;
+      }
+
+      .hero-desc {
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 300;
+        font-size: 1rem;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        max-width: 520px;
+        line-height: 1.7;
+      }
+
+      /* terminal strip abaixo da desc */
+      .hero-terminal {
+        margin-top: 8px;
+        font-size: 0.62rem;
+        letter-spacing: 1.5px;
+        color: var(--green-dim);
+        opacity: 0.55;
+        font-family: "Share Tech Mono", monospace;
+        height: 18px;
+        overflow: hidden;
+      }
+
+      /* ── Cards grid ── */
+      .cards {
+        position: relative;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: calc(100vh - 280px);
+      }
+
+      .card {
+        position: relative;
+        padding: 56px 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s;
+        overflow: hidden;
+      }
+      .card:first-child {
+        border-right: 1px solid var(--border-dim);
+      }
+      .card:hover {
+        background: var(--green-glow);
+      }
+
+      /* corner accent */
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48px;
+        height: 48px;
+        border-top: 2px solid var(--border-dim);
+        border-left: 2px solid var(--border-dim);
+        transition:
+          border-color 0.2s,
+          width 0.25s,
+          height 0.25s;
+      }
+      .card:hover::before {
+        border-color: var(--green);
+        width: 64px;
+        height: 64px;
+      }
+      .card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 48px;
+        height: 48px;
+        border-bottom: 2px solid var(--border-dim);
+        border-right: 2px solid var(--border-dim);
+        transition:
+          border-color 0.2s,
+          width 0.25s,
+          height 0.25s;
+      }
+      .card:hover::after {
+        border-color: var(--green);
+        width: 64px;
+        height: 64px;
+      }
+
+      .card-num {
+        font-family: "Orbitron", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 4px;
+        color: var(--text-muted);
+      }
+
+      .card-icon {
+        font-size: 2.4rem;
+        line-height: 1;
+        /* custom SVG icons inline via CSS mask — fallback to emoji */
+      }
+
+      .card-title {
+        font-family: "Orbitron", monospace;
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: 3px;
+        color: var(--green);
+        text-transform: uppercase;
+      }
+
+      .card-subtitle {
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 400;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        line-height: 1.6;
+      }
+
+      /* spec list */
+      .card-specs {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: auto;
+        padding-top: 24px;
+        border-top: 1px solid var(--border-dim);
+      }
+      .spec-row {
+        display: flex;
+        gap: 10px;
+        font-size: 0.62rem;
+        letter-spacing: 1.5px;
+      }
+      .spec-key {
+        color: var(--text-muted);
+        min-width: 60px;
+      }
+      .spec-val {
+        color: var(--green);
+      }
+
+      .card-warn .card-title {
+        color: var(--amber);
+      }
+      .card-warn .spec-val {
+        color: var(--amber);
+      }
+      .card-warn:hover {
+        background: rgba(170, 102, 0, 0.07);
+      }
+      .card-warn::before,
+      .card-warn::after {
+        /* keep default */
+      }
+      .card-warn:hover::before,
+      .card-warn:hover::after {
+        border-color: var(--amber);
+      }
+
+      /* CTA arrow */
+      .card-cta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.68rem;
+        letter-spacing: 3px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        transition:
+          color 0.2s,
+          gap 0.2s;
+      }
+      .card:hover .card-cta {
+        color: var(--green);
+        gap: 14px;
+      }
+      .card-warn:hover .card-cta {
+        color: var(--amber);
+        gap: 14px;
+      }
+      .card-cta .arrow {
+        font-size: 1rem;
+      }
+
+      /* ── Footer ── */
+      footer {
+        position: relative;
+        z-index: 10;
+        border-top: 1px solid var(--border-dim);
+        padding: 14px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.58rem;
+        letter-spacing: 2px;
+        color: var(--text-muted);
+      }
+      footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      footer a:hover {
+        color: var(--green);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 700px) {
+        header {
+          padding: 12px 20px;
+        }
+        .hero {
+          padding: 48px 24px 40px;
+        }
+        .cards {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+        .card {
+          padding: 40px 28px;
+        }
+        .card:first-child {
+          border-right: none;
+          border-bottom: 1px solid var(--border-dim);
+        }
+        footer {
+          padding: 12px 20px;
+          flex-direction: column;
+          gap: 6px;
+          text-align: center;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pulse-dot {
+          animation: none;
+        }
+        .card::before,
+        .card::after {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">ECDSA<span>//QR</span></div>
+      <div class="header-meta">
+        <div class="pulse-dot"></div>
+        <span>SISTEMA ATIVO</span>
+        <span class="sep">|</span>
+        <span>P-256</span>
+        <span class="sep">|</span>
+        <span>SHA256withECDSA</span>
+        <span class="sep">|</span>
+        <span id="clock"></span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-eyebrow">
+        Faculdade Impacta de Tecnologia &nbsp;·&nbsp; TCC 2024
+      </div>
+      <h1 class="hero-title">
+        Certificação<br />
+        <span class="slash">via </span>QR Assinado
+      </h1>
+      <p class="hero-desc">
+        Sistema de emissão e verificação de credenciais com assinatura digital
+        ECDSA P-256 em QR Codes — proteção contra ataques de Quishing.
+      </p>
+      <div class="hero-terminal" id="terminalStrip">
+        TRUST_STORE → CERT_01 · CERT_02 · CERT_03 · secp256r1 · SHA256withECDSA
+        · O(1) LOOKUP
+      </div>
+    </section>
+
+    <div class="cards">
+      <!-- Card 1 — Emissor -->
+      <a class="card" href="emissor/emissor.html">
+        <div class="card-num">// 01</div>
+        <div class="card-icon">🖊</div>
+        <div class="card-title">Emissor</div>
+        <div class="card-subtitle">
+          Gera QR Codes assinados com chave privada ECDSA.<br />
+          Simula certificados válidos, chave adulterada e emissor desconhecido.
+        </div>
+        <div class="card-specs">
+          <div class="spec-row">
+            <span class="spec-key">TIPO</span>
+            <span class="spec-val">Web App (HTML + jsrsasign)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">CURVA</span>
+            <span class="spec-val">secp256r1 / P-256</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">PAYLOAD</span>
+            <span class="spec-val">certId | dado | sigHex</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">CENÁRIOS</span
+            ><span class="spec-val"
+              >Legítimo · Chave inválida · Cert desconhecido · QR simples</span
+            >
+          </div>
+        </div>
+        <div class="card-cta">
+          <span>Abrir emissor</span><span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Card 2 — Verificador PWA -->
+      <a class="card card-warn" href="verificador-pwa/verificador.html">
+        <div class="card-num">// 02</div>
+        <div class="card-icon">📷</div>
+        <div class="card-title">Verificador</div>
+        <div class="card-subtitle">
+          PWA mobile com câmera para escanear e validar QR Codes em tempo real.
+          Consulta o TrustStore local via O(1) lookup por certId.
+        </div>
+        <div class="card-specs">
+          <div class="spec-row">
+            <span class="spec-key">TIPO</span>
+            <span class="spec-val">PWA (Web Crypto API)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">CÂMERA</span>
+            <span class="spec-val">jsQR · BarcodeDetector · manual</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">LOOKUP</span>
+            <span class="spec-val">O(1) por certId no TrustStore</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">SIG</span>
+            <span class="spec-val">DER → Raw antes de verify()</span>
+          </div>
+        </div>
+        <div class="card-cta">
+          <span>Abrir verificador</span><span class="arrow">→</span>
+        </div>
+      </a>
+    </div>
+
+    <footer>
+      <span
+        >ECDSA-QR-SYSTEM v2.0 &nbsp;·&nbsp; Faculdade Impacta de
+        Tecnologia</span
+      >
+      <span>
+        <a href="https://github.com/joao730/qr-verifier-android" target="_blank"
+          >GitHub</a
+        >
+        &nbsp;·&nbsp; Beatriz V. Araújo &nbsp;·&nbsp; João P. Aviz &nbsp;·&nbsp;
+        Luciano S. R. Segundo &nbsp;·&nbsp; William De O. Santos
+      </span>
+    </footer>
+
+    <script>
+      // Clock
+      (function tick() {
+        const now = new Date();
+        document.getElementById("clock").textContent =
+          now.toISOString().replace("T", " ").substring(0, 19) + " UTC";
+        setTimeout(tick, 1000);
+      })();
+
+      // Terminal strip typewriter loop
+      const lines = [
+        "TRUST_STORE → CERT_01 · CERT_02 · CERT_03 · secp256r1 · SHA256withECDSA · O(1) LOOKUP",
+        "ECDSA.sign( privateKey, SHA256( payload ) ) → DER_HEX",
+        "QR_PAYLOAD := certId | data | sigHex",
+        "verifySignature( pub, data, derToRaw(sigHex) ) → boolean",
+        "STATUS: ANTI-QUISHING ACTIVE · TRUST_STORE LOADED · 3 CERTS",
+      ];
+      let li = 0,
+        ci = 0;
+      const el = document.getElementById("terminalStrip");
+      function typeNext() {
+        if (ci <= lines[li].length) {
+          el.textContent = lines[li].substring(0, ci++);
+          setTimeout(typeNext, ci < lines[li].length ? 28 : 1800);
+        } else {
+          li = (li + 1) % lines.length;
+          ci = 0;
+          el.textContent = "";
+          setTimeout(typeNext, 400);
+        }
+      }
+      typeNext();
+    </script>
+  </body>
+</html>
