@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ECDSA QR — Sistema de Certificados</title>
+    <title>Certified QRc — Sistema de QRc Certificados</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap"
       rel="stylesheet"
@@ -18,7 +18,7 @@
         --border: #0a2a0a;
         --border-dim: #1a4a1a;
         --text: #323232;
-        --text-muted: #888;
+        --text-dim: #323232;
         --red: #cc0000;
         --amber: #aa6600;
       }
@@ -93,7 +93,7 @@
         text-transform: uppercase;
       }
       .logo span {
-        color: var(--text-muted);
+        color: var(--text-dim);
         font-weight: 400;
       }
 
@@ -102,7 +102,7 @@
         align-items: center;
         gap: 20px;
         font-size: 0.65rem;
-        color: var(--text-muted);
+        color: var(--text-dim);
         letter-spacing: 2px;
       }
       .pulse-dot {
@@ -144,7 +144,7 @@
       .hero-eyebrow {
         font-size: 0.6rem;
         letter-spacing: 5px;
-        color: var(--text-muted);
+        color: var(--text-dim);
         text-transform: uppercase;
       }
 
@@ -158,7 +158,7 @@
         line-height: 1.15;
       }
       .hero-title .slash {
-        color: var(--text-muted);
+        color: var(--text-dim);
         font-weight: 400;
       }
 
@@ -166,7 +166,7 @@
         font-family: "Rajdhani", sans-serif;
         font-weight: 300;
         font-size: 1rem;
-        color: var(--text-muted);
+        color: var(--text-dim);
         letter-spacing: 1px;
         max-width: 520px;
         line-height: 1.7;
@@ -255,7 +255,7 @@
         font-family: "Orbitron", monospace;
         font-size: 0.65rem;
         letter-spacing: 4px;
-        color: var(--text-muted);
+        color: var(--text-dim);
       }
 
       .card-icon {
@@ -277,7 +277,7 @@
         font-family: "Rajdhani", sans-serif;
         font-weight: 400;
         font-size: 0.9rem;
-        color: var(--text-muted);
+        color: var(--text-dim);
         letter-spacing: 1px;
         line-height: 1.6;
       }
@@ -298,7 +298,7 @@
         letter-spacing: 1.5px;
       }
       .spec-key {
-        color: var(--text-muted);
+        color: var(--text-dim);
         min-width: 60px;
       }
       .spec-val {
@@ -330,7 +330,7 @@
         gap: 10px;
         font-size: 0.68rem;
         letter-spacing: 3px;
-        color: var(--text-muted);
+        color: var(--text-dim);
         text-transform: uppercase;
         transition:
           color 0.2s,
@@ -359,10 +359,10 @@
         justify-content: space-between;
         font-size: 0.58rem;
         letter-spacing: 2px;
-        color: var(--text-muted);
+        color: var(--text-dim);
       }
       footer a {
-        color: var(--text-muted);
+        color: var(--text-dim);
         text-decoration: none;
         transition: color 0.15s;
       }
@@ -425,15 +425,15 @@
 
     <section class="hero">
       <div class="hero-eyebrow">
-        Faculdade Impacta de Tecnologia &nbsp;·&nbsp; TCC 2024
+        Faculdade Impacta de Tecnologia &nbsp;·&nbsp; TCC 2026
       </div>
       <h1 class="hero-title">
         Certificação<br />
         <span class="slash">via </span>QR Assinado
       </h1>
       <p class="hero-desc">
-        Sistema de emissão e verificação de credenciais com assinatura digital
-        ECDSA P-256 em QR Codes — proteção contra ataques de Quishing.
+        Sistema de emissão e verificação de QR Codes com assinatura digital
+        ECDSA P-256 — proteção contra ataques de Quishing.
       </p>
       <div class="hero-terminal" id="terminalStrip">
         TRUST_STORE → CERT_01 · CERT_02 · CERT_03 · secp256r1 · SHA256withECDSA
@@ -448,7 +448,7 @@
         <div class="card-icon">🖊</div>
         <div class="card-title">Emissor</div>
         <div class="card-subtitle">
-          Gera QR Codes assinados com chave privada ECDSA.<br />
+          Gerador de QR Codes assinados com chave privada ECDSA.<br />
           Simula certificados válidos, chave adulterada e emissor desconhecido.
         </div>
         <div class="card-specs">
@@ -482,8 +482,8 @@
         <div class="card-icon">📷</div>
         <div class="card-title">Verificador</div>
         <div class="card-subtitle">
-          PWA mobile com câmera para escanear e validar QR Codes em tempo real.
-          Consulta o TrustStore local via O(1) lookup por certId.
+          PWA mobile para escanear e validar QR Codes em tempo real. Consulta o
+          TrustStore local via O(1) lookup por certId.
         </div>
         <div class="card-specs">
           <div class="spec-row">
@@ -519,7 +519,7 @@
           >GitHub</a
         >
         &nbsp;·&nbsp; Beatriz V. Araújo &nbsp;·&nbsp; João P. Aviz &nbsp;·&nbsp;
-        Luciano S. R. Segundo &nbsp;·&nbsp; William De O. Santos
+        Luciano S. R. Segundo
       </span>
     </footer>
 
