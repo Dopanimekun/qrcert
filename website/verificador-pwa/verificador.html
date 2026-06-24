@@ -416,7 +416,9 @@
         padding: 4px 10px;
         cursor: pointer;
         color: var(--muted);
-        transition: color 0.2s, border-color 0.2s;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
       }
       .history-clear:hover {
         color: var(--invalid);
@@ -450,7 +452,7 @@
         border-radius: 4px;
       }
       .history-item:hover {
-        background: rgba(255,255,255,0.03);
+        background: rgba(255, 255, 255, 0.03);
       }
       .history-item:last-child {
         border-bottom: none;
@@ -465,9 +467,15 @@
         font-size: 14px;
         flex-shrink: 0;
       }
-      .history-badge.valid   { background: rgba(16,185,129,0.15); }
-      .history-badge.invalid { background: rgba(239,68,68,0.15); }
-      .history-badge.warn    { background: rgba(245,158,11,0.15); }
+      .history-badge.valid {
+        background: rgba(16, 185, 129, 0.15);
+      }
+      .history-badge.invalid {
+        background: rgba(239, 68, 68, 0.15);
+      }
+      .history-badge.warn {
+        background: rgba(245, 158, 11, 0.15);
+      }
       .history-info {
         flex: 1;
         min-width: 0;
@@ -481,9 +489,15 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .history-status.valid   { color: var(--valid); }
-      .history-status.invalid { color: var(--invalid); }
-      .history-status.warn    { color: var(--warn); }
+      .history-status.valid {
+        color: var(--valid);
+      }
+      .history-status.invalid {
+        color: var(--invalid);
+      }
+      .history-status.warn {
+        color: var(--warn);
+      }
       .history-detail {
         font-size: 11px;
         color: var(--muted);
@@ -517,7 +531,9 @@
         font-size: 11px;
         letter-spacing: 0.05em;
         cursor: pointer;
-        transition: color 0.2s, border-color 0.2s;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
       }
       .tab-btn.active {
         color: var(--accent);
@@ -571,9 +587,13 @@
       </header>
 
       <!-- Tab bar (aparece só quando há histórico) -->
-      <div class="tab-bar" id="tab-bar" style="display:none">
-        <button class="tab-btn active" id="tab-scan" onclick="showTab('scan')">SCANNER</button>
-        <button class="tab-btn" id="tab-hist" onclick="showTab('history')">HISTÓRICO <span class="tab-badge" id="hist-count">0</span></button>
+      <div class="tab-bar" id="tab-bar" style="display: none">
+        <button class="tab-btn active" id="tab-scan" onclick="showTab('scan')">
+          SCANNER
+        </button>
+        <button class="tab-btn" id="tab-hist" onclick="showTab('history')">
+          HISTÓRICO <span class="tab-badge" id="hist-count">0</span>
+        </button>
       </div>
 
       <div id="scanner-screen">
@@ -674,8 +694,8 @@
         const s = b.slice(sStart, sStart + sLen);
 
         const raw = new Uint8Array(64);
-        raw.set(r, 32 - r.length); // zero-padding à esquerda se r < 32B
-        raw.set(s, 64 - s.length); // zero-padding à esquerda se s < 32B
+        raw.set(r, 32 - r.length);
+        raw.set(s, 64 - s.length);
         return raw;
       }
 
@@ -703,14 +723,13 @@
       }
 
       async function verifyPayload(raw) {
-        // A assinatura hex nunca contém "|", então fatia pelo primeiro e último "|"
-        // Isso permite que o campo DADO contenha "|" sem quebrar o parse
         const firstPipe = raw.indexOf("|");
-        const lastPipe  = raw.lastIndexOf("|");
-        if (firstPipe === -1 || firstPipe === lastPipe) return { status: "malformed" };
+        const lastPipe = raw.lastIndexOf("|");
+        if (firstPipe === -1 || firstPipe === lastPipe)
+          return { status: "malformed" };
 
         const certId = raw.slice(0, firstPipe);
-        const data   = raw.slice(firstPipe + 1, lastPipe);
+        const data = raw.slice(firstPipe + 1, lastPipe);
         const sigHex = raw.slice(lastPipe + 1);
 
         if (!certId || !data || !sigHex) return { status: "malformed" };
@@ -800,7 +819,6 @@
         startScanner();
       }
 
-      // Canvas oculto usado para extrair frames do vídeo
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
@@ -814,14 +832,12 @@
         lastScanned = "";
         scanning = true;
 
-        // Para stream anterior se existir
         if (activeStream) {
           activeStream.getTracks().forEach((t) => t.stop());
           activeStream = null;
         }
 
         try {
-          // Solicita câmera traseira — no iPhone isso abre a câmera correta
           const stream = await navigator.mediaDevices.getUserMedia({
             video: {
               facingMode: { ideal: "environment" },
@@ -834,10 +850,8 @@
           activeStream = stream;
           video.srcObject = stream;
 
-          // No Safari/iOS é obrigatório .play() explícito após srcObject
           await video.play();
 
-          // Aguarda o vídeo ter dimensões reais antes de começar a ler frames
           await new Promise((resolve) => {
             if (video.readyState >= 2) return resolve();
             video.addEventListener("canplay", resolve, { once: true });
@@ -928,24 +942,35 @@
 
         let statusClass, icon, statusText, detail;
         if (result.status === "valid") {
-          statusClass = "valid"; icon = "✅";
+          statusClass = "valid";
+          icon = "✅";
           statusText = "ACESSO AUTORIZADO";
           detail = result.entry.name + " — " + result.data;
         } else if (result.status === "invalid") {
-          statusClass = "invalid"; icon = "❌";
+          statusClass = "invalid";
+          icon = "❌";
           statusText = "ASSINATURA INVÁLIDA";
           detail = "ID: " + result.certId + " — " + (result.data || "");
         } else if (result.status === "unknown") {
-          statusClass = "warn"; icon = "⚠️";
+          statusClass = "warn";
+          icon = "⚠️";
           statusText = "EMISSOR DESCONHECIDO";
           detail = "ID '" + result.certId + "' fora do TrustStore";
         } else {
-          statusClass = "warn"; icon = "⚠️";
+          statusClass = "warn";
+          icon = "⚠️";
           statusText = "QR INVÁLIDO";
           detail = "Formato não reconhecido";
         }
 
-        scanHistory.unshift({ statusClass, icon, statusText, detail, time, result });
+        scanHistory.unshift({
+          statusClass,
+          icon,
+          statusText,
+          detail,
+          time,
+          result,
+        });
 
         // Atualiza contador e mostra tab bar
         document.getElementById("hist-count").textContent = scanHistory.length;
@@ -957,10 +982,13 @@
       function renderHistory() {
         const list = document.getElementById("history-list");
         if (scanHistory.length === 0) {
-          list.innerHTML = '<div class="history-empty"><div class="history-empty-icon">📋</div><span>Nenhum scan realizado</span></div>';
+          list.innerHTML =
+            '<div class="history-empty"><div class="history-empty-icon">📋</div><span>Nenhum scan realizado</span></div>';
           return;
         }
-        list.innerHTML = scanHistory.map((item, i) => `
+        list.innerHTML = scanHistory
+          .map(
+            (item, i) => `
           <div class="history-item" onclick="showHistoryDetail(${i})">
             <div class="history-badge ${item.statusClass}">${item.icon}</div>
             <div class="history-info">
@@ -969,7 +997,9 @@
             </div>
             <div class="history-time">${item.time}</div>
           </div>
-        `).join("");
+        `,
+          )
+          .join("");
       }
 
       function showHistoryDetail(i) {
@@ -1020,3 +1050,4 @@
     </script>
   </body>
 </html>
+
