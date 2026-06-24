@@ -60,8 +60,8 @@
           0deg,
           transparent,
           transparent 2px,
-          rgba(0, 0, 0, 0.08) 2px,
-          rgba(0, 0, 0, 0.08) 4px
+          rgba(0, 0, 0, 0.04) 2px,
+          rgba(0, 0, 0, 0.04) 4px
         );
         pointer-events: none;
         z-index: 9999;
@@ -1561,10 +1561,7 @@
       <div class="status-left">
         <span>ECDSA-QR-EMITTER v2.0</span>
         <span style="color: var(--border-bright)">|</span>
-        <span class="status-msg" id="statusMsg">SISTEMA PRONTO</span>
-      </div>
-      <div>
-        <span id="statusTime"></span>
+        <span class="status-msg" id="statusMsg">SISTEMA DE ASSINATURA</span>
       </div>
     </div>
 
@@ -1577,7 +1574,7 @@
       // ── Clock ──────────────────────────────────────────────────────────
       function updateClock() {
         const now = new Date();
-        document.getElementById("statusTime").textContent =
+        document.getElementById("clock").textContent =
           now.toISOString().replace("T", " ").substring(0, 19) + " UTC";
       }
       setInterval(updateClock, 1000);
@@ -1955,4 +1952,3 @@
     </script>
   </body>
 </html>
-
